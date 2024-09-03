@@ -1,0 +1,7 @@
+
+{
+  "watch": ["src", "index.js", "views", "routes"],
+  "ext": "js,json",
+  "ignore": ["public/*"],
+  "delay": "1000"
+}
