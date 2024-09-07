@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-const SignupModal = ({ onClose }) => {
+const SignupModal = ({ onClose, openLogin }) => {
+  console.log('openLogin:', openLogin); // Debug
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [geoLocation, setGeoLocation] = useState('');
   const [error, setError] = useState('');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767); // Check if screen width is mobile size
-  const navigate = useNavigate();
 
   // Update isMobile state on window resize
   useEffect(() => {
@@ -20,18 +20,26 @@ const SignupModal = ({ onClose }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    console.log('SignupModal rendered, openLogin:', openLogin);
+  }, [openLogin]);
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await Axios.post('http://localhost:5000/api/signup', {
+      const response = await Axios.post(`http://localhost:5000/api/signup`, {
         name,
         email,
         password,
         location: geoLocation,
       });
-
+  
       if (response.data.status) {
-        navigate('/login');
+        if (typeof openLogin === 'function') {
+          openLogin();  // Call openLogin to open the LoginModal
+        } else {
+          console.error('openLogin is not a function');
+        }
         onClose(); // Close the modal on successful signup
       } else {
         setError(response.data.message || 'An error occurred');
@@ -41,7 +49,7 @@ const SignupModal = ({ onClose }) => {
       console.error(err);
     }
   };
-
+  
   // Dynamic styles
   const MODAL_STYLES = {
     position: 'fixed',
@@ -83,7 +91,6 @@ const SignupModal = ({ onClose }) => {
             right: '3px',
             borderRadius: '50%',
             padding: '5px 10px',
-
           }}
           onClick={onClose}
         >
