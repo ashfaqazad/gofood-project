@@ -27,7 +27,7 @@ const SignupModal = ({ onClose, openLogin }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await Axios.post(`http://localhost:5000/api/signup`, {
+      const response = await Axios.post(`https://gofood-project-8mzx.vercel.app/api/signup`, {
         name,
         email,
         password,
