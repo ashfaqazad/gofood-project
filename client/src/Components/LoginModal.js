@@ -38,7 +38,7 @@ export default function LoginModal({ onClose }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    Axios.post(`  http://localhost:5000/api/login`, {
+    Axios.post(`  https://gofood-project-8mzx.vercel.app/api/login`, {
       email,
       password
     }).then(response => {
